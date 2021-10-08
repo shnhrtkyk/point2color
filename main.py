@@ -109,71 +109,71 @@ class ImgtoPointDataset(data.Dataset):
         count = 0
         for file in self.point_list:
             print(file)
-                # point cloud 取得
-                file_h = laspy.file.File(file, mode='r')
-                print(file_h.header.min[0])
-                print(file_h.header.min[2])
-                print(file_h.header.min[1])
-                src = np.vstack([file_h.x, file_h.y, file_h.z]).transpose()
-                if(len(src)<npoints):continue
-                rgb = np.vstack([file_h.red, file_h.green, file_h.blue]).transpose()
-                rgb = rgb/255.0
-                print(np.amin(rgb, axis=0))
-                print(np.amax(rgb, axis=0))
-                points = file_h.points['point']
-                attr_names = [a for a in points.dtype.names] + ImgtoPointDataset.ATTR_EXTRA_LIST
-                features = np.array([getattr(file_h, name) for name in attr_names
-                                   if name not in ImgtoPointDataset.ATTR_EXLUSION_LIST]).transpose()
-                
-                print(features[:,1])
-                features = features/1.0
-                names = [name for name in attr_names if name not in ImgtoPointDataset.ATTR_EXLUSION_LIST]
-                print(names)
+            # point cloud 取得
+            file_h = laspy.file.File(file, mode='r')
+            print(file_h.header.min[0])
+            print(file_h.header.min[2])
+            print(file_h.header.min[1])
+            src = np.vstack([file_h.x, file_h.y, file_h.z]).transpose()
+            if(len(src)<npoints):continue
+            rgb = np.vstack([file_h.red, file_h.green, file_h.blue]).transpose()
+            rgb = rgb/255.0
+            print(np.amin(rgb, axis=0))
+            print(np.amax(rgb, axis=0))
+            points = file_h.points['point']
+            attr_names = [a for a in points.dtype.names] + ImgtoPointDataset.ATTR_EXTRA_LIST
+            features = np.array([getattr(file_h, name) for name in attr_names
+                                if name not in ImgtoPointDataset.ATTR_EXLUSION_LIST]).transpose()
+            
+            print(features[:,1])
+            features = features/1.0
+            names = [name for name in attr_names if name not in ImgtoPointDataset.ATTR_EXLUSION_LIST]
+            print(names)
 
-                file_h.close()
-                pcd = o3d.geometry.PointCloud()
-                pcd.points = o3d.utility.Vector3dVector(src)
-                pcd.colors = o3d.utility.Vector3dVector(rgb)
-                # cl, ind = pcd.remove_radius_outlier(nb_points=16, radius=0.05)
-                cl, ind = pcd.remove_statistical_outlier(nb_neighbors=20,
-                                                            std_ratio=2.0)
-                pcd = pcd.select_down_sample(ind)
-                src = np.asarray(pcd.points)
-                rgb = np.asarray(pcd.colors)
-                normlized_xyz = np.zeros((npoints, 3))
-                normlized_rgb = np.zeros((npoints, 3))
-                normlized_feature = np.zeros((npoints, 3))
-                self.coord_min, self.coord_max = np.amin(src, axis=0)[:3], np.amax(src, axis=0)[:3]
-                
-                if(self.coord_max[0]==0):continue
-                if(self.coord_max[1]==0):continue
-                if(self.coord_max[2]==0):continue
-                print(np.amin(src, axis=0)[:3] )
-                print(np.amax(src, axis=0)[:3] )
-                src[:, 0] = ((src[:, 0] - self.coord_min[0])/30.0) - 0.5
-                src[:, 1] = ((src[:, 1] - self.coord_min[1])/30.0) - 0.5
-                src[:, 2] = ((src[:, 2] - self.coord_min[2])/30.0) 
-                features[:,0] = features[:,0]/ 4000.0 #'intensity', 'raw_classification', 'num_returns']
-                features[:,1] = features[:,1]/ 17.0
-                features[:,2] = features[:,2]/ 8.0
+            file_h.close()
+            pcd = o3d.geometry.PointCloud()
+            pcd.points = o3d.utility.Vector3dVector(src)
+            pcd.colors = o3d.utility.Vector3dVector(rgb)
+            # cl, ind = pcd.remove_radius_outlier(nb_points=16, radius=0.05)
+            cl, ind = pcd.remove_statistical_outlier(nb_neighbors=20,
+                                                        std_ratio=2.0)
+            pcd = pcd.select_down_sample(ind)
+            src = np.asarray(pcd.points)
+            rgb = np.asarray(pcd.colors)
+            normlized_xyz = np.zeros((npoints, 3))
+            normlized_rgb = np.zeros((npoints, 3))
+            normlized_feature = np.zeros((npoints, 3))
+            self.coord_min, self.coord_max = np.amin(src, axis=0)[:3], np.amax(src, axis=0)[:3]
+            
+            if(self.coord_max[0]==0):continue
+            if(self.coord_max[1]==0):continue
+            if(self.coord_max[2]==0):continue
+            print(np.amin(src, axis=0)[:3] )
+            print(np.amax(src, axis=0)[:3] )
+            src[:, 0] = ((src[:, 0] - self.coord_min[0])/30.0) - 0.5
+            src[:, 1] = ((src[:, 1] - self.coord_min[1])/30.0) - 0.5
+            src[:, 2] = ((src[:, 2] - self.coord_min[2])/30.0) 
+            features[:,0] = features[:,0]/ 4000.0 #'intensity', 'raw_classification', 'num_returns']
+            features[:,1] = features[:,1]/ 17.0
+            features[:,2] = features[:,2]/ 8.0
 
 
-                print(np.amin(src, axis=0)[:3] )
-                print(np.amax(src, axis=0)[:3] )
-                if(len(src) >=npoints):
-                    normlized_xyz[:,:]=src[:npoints,:]
-                    normlized_rgb[:,:]=rgb[:npoints,:]
-                    normlized_feature[:,:] = features[:npoints,:]
-                else:
-                    normlized_xyz[:len(src),:]=src[:,:]
+            print(np.amin(src, axis=0)[:3] )
+            print(np.amax(src, axis=0)[:3] )
+            if(len(src) >=npoints):
+                normlized_xyz[:,:]=src[:npoints,:]
+                normlized_rgb[:,:]=rgb[:npoints,:]
+                normlized_feature[:,:] = features[:npoints,:]
+            else:
+                normlized_xyz[:len(src),:]=src[:,:]
 
-                self.pointlist.append(normlized_xyz)
-                self.rgblist.append(normlized_rgb)
-                normlized_xyz = torch.from_numpy(normlized_xyz).float()
-                random_features = torch.randn(npoints,6)
-                random_features[:, :3] = torch.from_numpy(normlized_feature).float()
+            self.pointlist.append(normlized_xyz)
+            self.rgblist.append(normlized_rgb)
+            normlized_xyz = torch.from_numpy(normlized_xyz).float()
+            random_features = torch.randn(npoints,6)
+            random_features[:, :3] = torch.from_numpy(normlized_feature).float()
 
-                self.datalist.append(Data(pos=normlized_xyz[:, :], x=random_features[ :, :3]))
+            self.datalist.append(Data(pos=normlized_xyz[:, :], x=random_features[ :, :3]))
 
                 
 
