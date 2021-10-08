@@ -102,7 +102,7 @@ class ImgtoPointDataset(data.Dataset):
         self.datalist = []
         
         self.transform = transform
-        self.pointpath = root + "/split_RGB/"
+        self.pointpath = root + "/pointcloud_path/"
         print(self.pointpath )
         self.point_list  = glob.glob(self.pointpath + "/*.las")[:]
         print(self.point_list )
