@@ -109,8 +109,6 @@ class ImgtoPointDataset(data.Dataset):
         count = 0
         for file in self.point_list:
             print(file)
-            if '271460_3289689' in file: 
-                print(file)
                 # point cloud 取得
                 file_h = laspy.file.File(file, mode='r')
                 print(file_h.header.min[0])
@@ -199,7 +197,7 @@ transform = transforms.Compose([
     transforms.Resize((128, 128)),
     transforms.ToTensor(),
     ])
-train_dataset = ImgtoPointDataset(root="/home/7/19D50097/shino/3dgan/data/",transform=transform)
+train_dataset = ImgtoPointDataset(root="/path/to/root/",transform=transform)
 train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True,
                           num_workers=16)
 
