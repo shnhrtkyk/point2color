@@ -6,6 +6,26 @@ Point2color: 3D Point Cloud Colorization Using a Conditional Generative Network 
 
 ![Point2color](https://user-images.githubusercontent.com/49538481/118940135-5efa8080-b98b-11eb-8c22-de4f156c3fa7.png)
 
+## Environment
+The following libraries are the environment I used for my experiments.
+
+- python 3.6.5
+- cuda: 10.1 
+- nccl: 2.2.13
+- cudnn: 7.4
+- librarys
+    - laspy==1.7.0
+    - torch==1.6.0+cu101
+    - torch-cluster==1.5.8
+    - torch-geometric==1.6.3
+    - torch-scatter==2.0.5
+    - torch-sparse==0.6.8
+    - torch-spline-conv==1.2.0
+    - torchfile==0.1.0
+    - torchvision==0.7.0+cu101
+    - pytorch3d==0.3.0
+    - open3d==0.8.0.0
+    
 
 @InProceedings{Shinohara_2021_CVPR,  
     author    = {Shinohara, Takayuki and Xiu, Haoyi and Matsuoka, Masashi},  

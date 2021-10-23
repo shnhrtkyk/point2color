@@ -1,8 +1,6 @@
 import argparse
 import os
 import numpy as np
-import math
-import itertools
 import time
 import datetime
 import sys
@@ -11,7 +9,6 @@ import torchvision.transforms as transforms
 from torchvision.utils import save_image
 
 from torch.utils.data import DataLoader
-from torchvision import datasets
 from torch.autograd import Variable
 
 import laspy
@@ -21,8 +18,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 
-import os.path as osp
-
 import torch
 import torch.nn as nn
 import torch.utils.data as data
@@ -31,8 +26,6 @@ import torch.nn.functional as F
 import torch_geometric.transforms as T
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import knn_interpolate
-from torch_geometric.utils import intersection_and_union as i_and_u
-from PIL import Image
 from pointnet2_classification import SAModule, GlobalSAModule, MLP
 from torch_geometric.data import  Data, Batch
 
@@ -41,11 +34,9 @@ from torchvision.utils import save_image
 import glob
 import open3d as o3d
 import torchvision.transforms as transforms
-import rasterio
 import numpy as np
 # Data structures and functions for rendering
 from pytorch3d.structures import Pointclouds
-from pytorch3d.vis.plotly_vis import AxisArgs, plot_batch_individually, plot_scene
 from pytorch3d.renderer import (
     look_at_view_transform,
     look_at_rotation,
